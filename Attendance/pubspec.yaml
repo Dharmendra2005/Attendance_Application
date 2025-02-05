@@ -1,0 +1,36 @@
+name: classlytic_app
+description: "A new Flutter project."
+publish_to: 'none'
+
+# Version and build number
+version: 1.0.0+1
+
+environment:
+  sdk: '^3.6.0'  # Ensures compatibility with Dart 3.6.0 and above
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  image_picker: ^1.1.2
+  http: ^1.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1  # Package for setting app icons
+
+flutter:
+  uses-material-design: true
+
+  # Add your assets (e.g., app icons)
+  assets:
+    - assets/App_icon.webp  # Ensure this file exists in your project
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/App_icon.webp"  # Path to your app icon
+  adaptive_icon_foreground: "assets/App_icon.webp"
+  adaptive_icon_background: "#C8C6C6"
