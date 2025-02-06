@@ -26,11 +26,11 @@ flutter:
 
   # Add your assets (e.g., app icons)
   assets:
-    - assets/App_icon.webp  # Ensure this file exists in your project
+    - assets/Cuboid.png  # Ensure this file exists in your project
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/App_icon.webp"  # Path to your app icon
-  adaptive_icon_foreground: "assets/App_icon.webp"
+  image_path: "assets/Cuboid.png"  # Path to your app icon
+  adaptive_icon_foreground: "assets/Cuboid.png"
   adaptive_icon_background: "#C8C6C6"

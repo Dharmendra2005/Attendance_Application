@@ -1,3 +1,4 @@
+// main.dart
 import 'package:flutter/material.dart';
 import 'student.dart';
 import 'faculty.dart';
@@ -33,7 +34,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => StudentPage()),
+                  MaterialPageRoute(builder: (context) => StudentLoginPage()),
                 );
               },
               child: Container(
@@ -54,6 +55,7 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 20),
             GestureDetector(
               onTap: () {
+                // Keep the original FacultyPage navigation
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => FacultyPage()),
