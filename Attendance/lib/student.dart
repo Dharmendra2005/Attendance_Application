@@ -7,6 +7,7 @@ class StudentSignUpPage extends StatefulWidget {
   const StudentSignUpPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _StudentSignUpPageState createState() => _StudentSignUpPageState();
 }
 
@@ -18,7 +19,8 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
   String _uploadButtonText = "Upload a photo";
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
@@ -37,7 +39,6 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
     } else if (_image == null) {
       _showErrorDialog('Please upload a photo.');
     } else {
-      // If all fields are filled, navigate to the next page
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => StudentHomePage()),
@@ -48,20 +49,16 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+      builder: (context) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -101,7 +98,8 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
                     SizedBox(height: 20),
                     _buildTextField('Email', _emailController),
                     SizedBox(height: 20),
-                    _buildTextField('Password', _passwordController, obscureText: true),
+                    _buildTextField('Password', _passwordController,
+                        obscureText: true),
                     SizedBox(height: 20),
                     _buildUploadButton(),
                     SizedBox(height: 30),
@@ -120,7 +118,8 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
     );
   }
 
-  Widget _buildTextField(String hint, TextEditingController controller, {bool obscureText = false}) {
+  Widget _buildTextField(String hint, TextEditingController controller,
+      {bool obscureText = false}) {
     return Container(
       width: 300,
       height: 50,
@@ -166,7 +165,7 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
 
   Widget _buildSignUpButton() {
     return GestureDetector(
-      onTap: _signUp, // Calls the _signUp method when tapped
+      onTap: _signUp,
       child: Container(
         width: 120,
         height: 40,
@@ -189,10 +188,40 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
   }
 }
 
-
 class StudentLoginPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  StudentLoginPage({super.key});
+
+  void _signIn(BuildContext context) {
+    if (_usernameController.text.isEmpty) {
+      _showErrorDialog(context, 'Please fill in the username.');
+    } else if (_passwordController.text.isEmpty) {
+      _showErrorDialog(context, 'Please fill in the password.');
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => StudentHomePage()),
+      );
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,26 +245,23 @@ class StudentLoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildTextField('Username/Email', _emailController),
+                  _buildTextField('Username', _usernameController),
                   SizedBox(height: 20),
-                  _buildTextField('Password', _passwordController, obscureText: true),
+                  _buildTextField('Password', _passwordController,
+                      obscureText: true),
                   SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildButton('sign up', () {
+                      _buildButton('Sign Up', () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => StudentSignUpPage()),
+                          MaterialPageRoute(
+                              builder: (context) => StudentSignUpPage()),
                         );
                       }),
                       SizedBox(width: 20),
-                      _buildButton('sign in', () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => StudentHomePage()),
-                        );
-                      }),
+                      _buildButton('Sign In', () => _signIn(context)),
                     ],
                   ),
                 ],
@@ -251,7 +277,8 @@ class StudentLoginPage extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String hint, TextEditingController controller, {bool obscureText = false}) {
+  Widget _buildTextField(String hint, TextEditingController controller,
+      {bool obscureText = false}) {
     return Container(
       width: 300,
       height: 50,
@@ -298,37 +325,32 @@ class StudentLoginPage extends StatelessWidget {
 }
 
 class StudentHomePage extends StatelessWidget {
+  const StudentHomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Student"),
-        backgroundColor: Colors.grey,
+        title: Text('Student'),
+        backgroundColor: const Color.fromARGB(253, 248, 247, 247),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Column(
-              children: [
-                Text(
-                  "Open Camera to scan scanner",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.brown,
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // Open camera logic here
-                  },
-                  child: Text("Open"),
-                ),
-              ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Open Camera to scan scanner',
+              style: TextStyle(fontSize: 20, color: Colors.brown),
             ),
-          ),
-        ],
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Open camera logic here
+              },
+              child: Text('Open'),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
         height: 50,
