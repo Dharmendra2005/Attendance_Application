@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621705009788",
+    "project_id": "claytic",
+    "storage_bucket": "claytic.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621705009788:android:b0ff6128624478102587f9",
+        "android_client_info": {
+          "package_name": "com.example.attend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaY7QMEg4SYogfI7zLRVRMD5nhzn7kc6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

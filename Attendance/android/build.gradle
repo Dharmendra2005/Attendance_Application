@@ -1,11 +1,12 @@
 buildscript {
     repositories {
-        google() // Make sure the Google repository is included
-        mavenCentral() // Optional, but helps with certain dependencies
+        google() // Required for Google dependencies
+        mavenCentral() // Optional but recommended
     }
     dependencies {
-        // Update to AGP version 8.2.1 or higher
-         classpath 'com.android.tools.build:gradle:8.2.1'
+        // Ensure these versions are compatible
+        classpath 'com.android.tools.build:gradle:8.2.1'
+        classpath 'com.google.gms:google-services:4.4.2'
     }
 }
 

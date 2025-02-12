@@ -41,7 +41,7 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => StudentHomePage()),
+        MaterialPageRoute(builder: (context) => StudentHomePage(uploadedImage: _image)),
       );
     }
   }
@@ -175,7 +175,7 @@ class _StudentSignUpPageState extends State<StudentSignUpPage> {
         ),
         child: Center(
           child: Text(
-            'Sign Up',
+            'Sign In',
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
@@ -196,7 +196,7 @@ class StudentLoginPage extends StatelessWidget {
 
   void _signIn(BuildContext context) {
     if (_usernameController.text.isEmpty) {
-      _showErrorDialog(context, 'Please fill in the username.');
+      _showErrorDialog(context, 'Please fill in the username or email.');
     } else if (_passwordController.text.isEmpty) {
       _showErrorDialog(context, 'Please fill in the password.');
     } else {
@@ -245,7 +245,7 @@ class StudentLoginPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildTextField('Username', _usernameController),
+                  _buildTextField('Username/email', _usernameController),
                   SizedBox(height: 20),
                   _buildTextField('Password', _passwordController,
                       obscureText: true),
@@ -276,7 +276,7 @@ class StudentLoginPage extends StatelessWidget {
       ),
     );
   }
-
+  
   Widget _buildTextField(String hint, TextEditingController controller,
       {bool obscureText = false}) {
     return Container(
@@ -325,7 +325,7 @@ class StudentLoginPage extends StatelessWidget {
 }
 
 class StudentHomePage extends StatelessWidget {
-  const StudentHomePage({super.key});
+  const StudentHomePage({super.key, File? uploadedImage});
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,11 @@
-// main.dart
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'student.dart';
 import 'faculty.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // ✅ Ensures Flutter is ready
+  await Firebase.initializeApp(); // ✅ Initializes Firebase
   runApp(MyApp());
 }
 
@@ -55,7 +57,6 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 20),
             GestureDetector(
               onTap: () {
-                // Keep the original FacultyPage navigation
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => FacultyPage()),
