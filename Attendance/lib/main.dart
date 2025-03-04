@@ -2,6 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:classlytic_app/services/camera_service.dart';
+import 'package:classlytic_app/services/AttendanceStatus.dart';
+import 'package:classlytic_app/services/GenerateQueryPage.dart';
+
+
 import 'dart:io';
 
 void main() {
@@ -368,18 +372,24 @@ class _MainPageState extends State<MainPage> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.qr_code_2_outlined),
-              title: Text('Generate Queries'),
-              onTap: () {
-                Navigator.pop(context); // Close drawer
-              },
-            ),
+             leading: Icon(Icons.qr_code_2_outlined),
+             title: Text('Generate Queries'),
+             onTap: () {
+            Navigator.push(
+             context,
+            MaterialPageRoute(builder: (context) => GenerateQueryPage()),
+           );
+          },
+          ),
             ListTile(
               leading: Icon(Icons.analytics_outlined),
               title: Text('Attendance Status'),
               onTap: () {
-                Navigator.pop(context); // Close drawer
-              },
+              Navigator.push(
+              context,
+             MaterialPageRoute(builder: (context) => AttendanceStatusPage()),
+              );
+            },
             ),
             ListTile(
             leading: Icon(Icons.logout_outlined),
