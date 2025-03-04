@@ -1,5 +1,5 @@
 # Attendance_Application
-This is an App which is take the attendance of a classroom made by using Dart (Flutter)<br>
+This is an App which helps take the attendance of a classroom made by using Dart(Flutter) tech language<br>
 <br>
 //phase 1<br>
 • FACULTY AND STUDENT can select their respective roles.<br>
