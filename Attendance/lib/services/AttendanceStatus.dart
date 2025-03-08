@@ -8,6 +8,8 @@ class AttendanceStatusPage extends StatelessWidget {
     {'date': '2025-03-04', 'status': 'Late'},
   ];
 
+ AttendanceStatusPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

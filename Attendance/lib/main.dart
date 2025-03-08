@@ -4,6 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:classlytic_app/services/camera_service.dart';
 import 'package:classlytic_app/services/AttendanceStatus.dart';
 import 'package:classlytic_app/services/GenerateQueryPage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 import 'dart:io';
@@ -26,6 +28,137 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+// class LoginPage extends StatefulWidget {
+//   const LoginPage({super.key});
+
+//   @override
+//   State<LoginPage> createState() => _LoginPageState();
+// }
+
+// class _LoginPageState extends State<LoginPage> {
+//   final _formKey = GlobalKey<FormState>();
+//   String _email = '';
+//   String _password = '';
+
+//   void _login() {
+//     if (_formKey.currentState!.validate()) {
+//       _formKey.currentState!.save();
+//       final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
+//       final passwordRegex =
+//           RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
+//       if (emailRegex.hasMatch(_email) && passwordRegex.hasMatch(_password)) {
+//         Navigator.pushReplacement(
+//           context,
+//           MaterialPageRoute(builder: (context) => MainPage()),
+//         );
+//       } else {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(content: Text("Invalid email or password format!")),
+//         );
+//       }
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: Center(
+//         child: Card(
+//           elevation: 5,
+//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+//           child: Padding(
+//             padding: const EdgeInsets.all(20.0),
+//             child: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 CircleAvatar(
+//                   radius: 40,
+//                   backgroundColor: Colors.grey[300],
+//                   child: Icon(Icons.person, size: 50, color: Colors.white),
+//                 ),
+//                 SizedBox(height: 15),
+//                 Text("LOGIN", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+//                 SizedBox(height: 15),
+//                 Form(
+//                   key: _formKey,
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.stretch,
+//                     children: <Widget>[
+//                       TextFormField(
+//                         decoration: InputDecoration(
+//                           prefixIcon: Icon(Icons.person),
+//                           labelText: 'Emailid',
+//                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                         ),
+//                         keyboardType: TextInputType.emailAddress,
+//                         validator: (value) {
+//                           if (value == null || value.isEmpty) {
+//                             return 'Please enter your email';
+//                           }
+//                           final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
+//                           if (!emailRegex.hasMatch(value)) {
+//                             return 'Enter a valid Gmail address';
+//                           }
+//                           return null;
+//                         },
+//                         onSaved: (value) => _email = value!,
+//                       ),
+//                       SizedBox(height: 10),
+//                       TextFormField(
+//                         decoration: InputDecoration(
+//                           prefixIcon: Icon(Icons.lock),
+//                           labelText: 'Password',
+//                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                         ),
+//                         obscureText: true,
+//                         validator: (value) {
+//                           if (value == null || value.isEmpty) {
+//                             return 'Please enter your password';
+//                           }
+//                           final passwordRegex =
+//                               RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
+//                           if (!passwordRegex.hasMatch(value)) {
+//                             return 'Password must have uppercase, lowercase, number & symbol';
+//                           }
+//                           return null;
+//                         },
+//                         onSaved: (value) => _password = value!,
+//                       ),
+//                       SizedBox(height: 10),
+//                       ElevatedButton(
+//                         onPressed: _login,
+//                         style: ElevatedButton.styleFrom(
+//                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+//                           padding: EdgeInsets.symmetric(vertical: 12),
+//                         ),
+//                         child: Text('LOGIN'),
+//                       ),
+//                       ElevatedButton(
+//                         onPressed: () {
+//                         Navigator.push(
+//                         context,
+//                          MaterialPageRoute(builder: (context) => SignUpPage()),
+//                           );
+//                           },
+//                         style: ElevatedButton.styleFrom(
+//                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+//                    padding: EdgeInsets.symmetric(vertical: 12),
+//                         ),
+//                          child: Text('SignUp'),
+//                      ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -38,21 +171,25 @@ class _LoginPageState extends State<LoginPage> {
   String _email = '';
   String _password = '';
 
-  void _login() {
+  Future<void> _login() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isSignedUp = prefs.getBool('isSignedUp') ?? false;
+
+    if (!isSignedUp) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("❌ Please sign up first!")));
+      return;
+    }
+
+    String? storedEmail = prefs.getString('email');
+    String? storedPassword = prefs.getString('password');
+
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
-      final passwordRegex =
-          RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
-      if (emailRegex.hasMatch(_email) && passwordRegex.hasMatch(_password)) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainPage()),
-        );
+
+      if (_email == storedEmail && _password == storedPassword) {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainPage()));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Invalid email or password format!")),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("❌ Incorrect email or password!")));
       }
     }
   }
@@ -70,81 +207,36 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey[300],
-                  child: Icon(Icons.person, size: 50, color: Colors.white),
-                ),
+                CircleAvatar(radius: 40, backgroundColor: Colors.grey[300], child: Icon(Icons.person, size: 50)),
                 SizedBox(height: 15),
                 Text("LOGIN", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 SizedBox(height: 15),
                 Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          labelText: 'Emailid',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
+                        decoration: InputDecoration(labelText: 'Email ID'),
                         keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
-                          if (!emailRegex.hasMatch(value)) {
-                            return 'Enter a valid Gmail address';
-                          }
-                          return null;
-                        },
                         onSaved: (value) => _email = value!,
                       ),
                       SizedBox(height: 10),
                       TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          labelText: 'Password',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
+                        decoration: InputDecoration(labelText: 'Password'),
                         obscureText: true,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          final passwordRegex =
-                              RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
-                          if (!passwordRegex.hasMatch(value)) {
-                            return 'Password must have uppercase, lowercase, number & symbol';
-                          }
-                          return null;
-                        },
                         onSaved: (value) => _password = value!,
                       ),
                       SizedBox(height: 10),
                       ElevatedButton(
                         onPressed: _login,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                        ),
                         child: Text('LOGIN'),
                       ),
-                      ElevatedButton(
+                      TextButton(
                         onPressed: () {
-                        Navigator.push(
-                        context,
-                         MaterialPageRoute(builder: (context) => SignUpPage()),
-                          );
-                          },
-                        style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                   padding: EdgeInsets.symmetric(vertical: 12),
-                        ),
-                         child: Text('SignUp'),
-                     ),
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+                        },
+                        child: Text('Don\'t have an account? Sign up'),
+                      ),
                     ],
                   ),
                 ),
@@ -156,6 +248,181 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
+// class SignUpPage extends StatefulWidget {
+//   const SignUpPage({super.key});
+
+//   @override
+//   State<SignUpPage> createState() => _SignUpPageState();
+// }
+
+// class _SignUpPageState extends State<SignUpPage> {
+//   final _formKey = GlobalKey<FormState>();
+//   String _username = '';
+//   String _email = '';
+//   String _password = '';
+//   File? _selectedImage;
+
+//   Future<void> _pickImage() async {
+//     final ImagePicker picker = ImagePicker();
+//     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+//     if (image != null) {
+//       setState(() {
+//         _selectedImage = File(image.path);
+//       });
+//     }
+//   }
+
+//   // ignore: non_constant_identifier_names
+//   void _SignUp() {
+//     if (_formKey.currentState!.validate()) {
+//       _formKey.currentState!.save();
+//       final usernameRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])');
+//       final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
+//       final passwordRegex =
+//           RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
+
+//       if (emailRegex.hasMatch(_email) &&
+//           usernameRegex.hasMatch(_username) &&
+//           passwordRegex.hasMatch(_password)) {
+//         // ignore: avoid_print
+//         print("✅ Signup Successful! Navigating to MainPage...");
+//         Navigator.pushReplacement(
+//           context,
+//           MaterialPageRoute(builder: (context) => MainPage()),
+//         );
+//       } else {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           SnackBar(content: Text("Invalid username, email, or password format!")),
+//         );
+//       }
+//     }
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Center(
+//         child: Card(
+//           elevation: 5,
+//           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+//           child: Padding(
+//             padding: const EdgeInsets.all(20.0),
+//             child: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 CircleAvatar(
+//                   radius: 40,
+//                   backgroundColor: Colors.grey[300],
+//                   backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : null,
+//                   child: _selectedImage == null
+//                       ? Icon(Icons.person, size: 50, color: Colors.white)
+//                       : null,
+//                 ),
+//                 SizedBox(height: 10),
+                
+//                 ElevatedButton.icon(
+//                   onPressed: _pickImage,
+//                   icon: Icon(Icons.upload),
+//                   label: Text("Upload Photo"),
+//                   style: ElevatedButton.styleFrom(
+//                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+//                     padding: EdgeInsets.symmetric(vertical: 10),
+//                   ),
+//                 ),
+
+//                 SizedBox(height: 15),
+//                 Text("SIGNUP",
+//                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+//                 SizedBox(height: 15),
+//                 Form(
+//                   key: _formKey,
+//                   child: Column(
+//                     crossAxisAlignment: CrossAxisAlignment.stretch,
+//                     children: <Widget>[
+//                       TextFormField(
+//                         decoration: InputDecoration(
+//                           prefixIcon: Icon(Icons.person),
+//                           labelText: 'Username',
+//                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                         ),
+//                         validator: (value) {
+//                           if (value == null || value.isEmpty) {
+//                             return 'Please enter your username';
+//                           }
+//                           final usernameRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])');
+//                           if (!usernameRegex.hasMatch(value)) {
+//                             return 'Enter a valid Username';
+//                           }
+//                           return null;
+//                         },
+//                         onSaved: (value) => _username = value!,
+//                       ),
+//                       SizedBox(height: 10),
+//                       TextFormField(
+//                         decoration: InputDecoration(
+//                           prefixIcon: Icon(Icons.email),
+//                           labelText: 'EmailID',
+//                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                         ),
+//                         keyboardType: TextInputType.emailAddress,
+//                         validator: (value) {
+//                           if (value == null || value.isEmpty) {
+//                             return 'Please enter your email';
+//                           }
+//                           final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
+//                           if (!emailRegex.hasMatch(value)) {
+//                             return 'Enter a valid Gmail address';
+//                           }
+//                           return null;
+//                         },
+//                         onSaved: (value) => _email = value!,
+//                       ),
+//                       SizedBox(height: 10),
+//                       TextFormField(
+//                         decoration: InputDecoration(
+//                           prefixIcon: Icon(Icons.lock),
+//                           labelText: 'Password',
+//                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+//                         ),
+//                         obscureText: true,
+//                         validator: (value) {
+//                           if (value == null || value.isEmpty) {
+//                             return 'Please enter your password';
+//                           }
+//                           final passwordRegex = RegExp(
+//                               r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
+//                           if (!passwordRegex.hasMatch(value)) {
+//                             return 'Password must have uppercase, lowercase, number & symbol';
+//                           }
+//                           return null;
+//                         },
+//                         onSaved: (value) => _password = value!,
+//                       ),
+//                       SizedBox(height: 10),
+
+//                       ElevatedButton(
+//                         onPressed: _SignUp,
+//                         style: ElevatedButton.styleFrom(
+//                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+//                           padding: EdgeInsets.symmetric(vertical: 12),
+//                         ),
+//                         child: Text('SIGNIN'),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -182,28 +449,26 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  // ignore: non_constant_identifier_names
-  void _SignUp() {
+  Future<void> _signUp() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      final usernameRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])');
-      final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
-      final passwordRegex =
-          RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
 
-      if (emailRegex.hasMatch(_email) &&
-          usernameRegex.hasMatch(_username) &&
-          passwordRegex.hasMatch(_password)) {
-        // ignore: avoid_print
-        print("✅ Signup Successful! Navigating to MainPage...");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainPage()),
-        );
+      final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
+      final passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
+
+      if (emailRegex.hasMatch(_email) && passwordRegex.hasMatch(_password)) {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('username', _username);
+        await prefs.setString('email', _email);
+        await prefs.setString('password', _password);
+        await prefs.setString('image', _selectedImage?.path ?? '');
+        await prefs.setBool('isSignedUp', true);
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("✅ Signup Successful!")));
+
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Invalid username, email, or password format!")),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Invalid email or password format!")));
       }
     }
   }
@@ -224,25 +489,16 @@ class _SignUpPageState extends State<SignUpPage> {
                   radius: 40,
                   backgroundColor: Colors.grey[300],
                   backgroundImage: _selectedImage != null ? FileImage(_selectedImage!) : null,
-                  child: _selectedImage == null
-                      ? Icon(Icons.person, size: 50, color: Colors.white)
-                      : null,
+                  child: _selectedImage == null ? Icon(Icons.person, size: 50, color: Colors.white) : null,
                 ),
                 SizedBox(height: 10),
-                
                 ElevatedButton.icon(
                   onPressed: _pickImage,
                   icon: Icon(Icons.upload),
                   label: Text("Upload Photo"),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                  ),
                 ),
-
                 SizedBox(height: 15),
-                Text("SIGNUP",
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                Text("SIGNUP", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
                 SizedBox(height: 15),
                 Form(
                   key: _formKey,
@@ -250,73 +506,35 @@ class _SignUpPageState extends State<SignUpPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.person),
-                          labelText: 'Username',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your username';
-                          }
-                          final usernameRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])');
-                          if (!usernameRegex.hasMatch(value)) {
-                            return 'Enter a valid Username';
-                          }
-                          return null;
-                        },
+                        decoration: InputDecoration(labelText: 'Username'),
                         onSaved: (value) => _username = value!,
                       ),
                       SizedBox(height: 10),
                       TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.email),
-                          labelText: 'EmailID',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
+                        decoration: InputDecoration(labelText: 'EmailID'),
                         keyboardType: TextInputType.emailAddress,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your email';
-                          }
                           final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@gmail\.com$');
-                          if (!emailRegex.hasMatch(value)) {
-                            return 'Enter a valid Gmail address';
-                          }
+                          if (!emailRegex.hasMatch(value!)) return 'Enter a valid Gmail address';
                           return null;
                         },
                         onSaved: (value) => _email = value!,
                       ),
                       SizedBox(height: 10),
                       TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.lock),
-                          labelText: 'Password',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                        ),
+                        decoration: InputDecoration(labelText: 'Password'),
                         obscureText: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your password';
-                          }
-                          final passwordRegex = RegExp(
-                              r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
-                          if (!passwordRegex.hasMatch(value)) {
-                            return 'Password must have uppercase, lowercase, number & symbol';
-                          }
+                          final passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$');
+                          if (!passwordRegex.hasMatch(value!)) return 'Password must contain uppercase, lowercase, number & symbol';
                           return null;
                         },
                         onSaved: (value) => _password = value!,
                       ),
                       SizedBox(height: 10),
-
                       ElevatedButton(
-                        onPressed: _SignUp,
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                        ),
-                        child: Text('SIGNIN'),
+                        onPressed: _signUp,
+                        child: Text('SIGNUP'),
                       ),
                     ],
                   ),
@@ -329,6 +547,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
+
 // Main Page
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -339,7 +558,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final CameraService _cameraService = CameraService();
+  // final CameraService _cameraService = CameraService();
 
   @override
   Widget build(BuildContext context) {
@@ -401,21 +620,49 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-    body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Open Camera to Scan the Scanner'),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                _cameraService.openCamera(); // Call the function when button is pressed
-              },
-              child: Text('OPEN'),
-            ),
-          ],
-        ),
+    // body: Center(
+    //     child: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       children: [
+    //         Text('Open Camera to Scan the Scanner'),
+    //         SizedBox(height: 20),
+    //         ElevatedButton(
+    //           onPressed: () {
+    //             _cameraService.openCamera(); // Call the function when button is pressed
+    //           },
+    //           child: Text('OPEN'),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+      body: Center(
+  child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text('Open Camera to Scan a QR Code'),
+      SizedBox(height: 20),
+      
+      // ElevatedButton(
+      //   onPressed: () {
+      //     _cameraService.openCamera(); // Captures an image
+      //   },
+      //   child: Text('Open Camera'),
+      // ),
+
+      // SizedBox(height: 20),
+
+      ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QRScannerPage()),
+          );
+        },
+        child: Text('Scan QR Code'),
       ),
+    ],
+  ),
+),
     );
   }
 }

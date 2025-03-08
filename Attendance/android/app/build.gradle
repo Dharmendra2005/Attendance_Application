@@ -22,7 +22,7 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
-    compileSdkVersion 34
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.example.attend"
         minSdkVersion 23 // Change this to 23

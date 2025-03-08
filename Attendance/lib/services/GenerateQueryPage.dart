@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GenerateQueryPage extends StatefulWidget {
+  const GenerateQueryPage({super.key});
+
   @override
   _GenerateQueryPageState createState() => _GenerateQueryPageState();
 }
