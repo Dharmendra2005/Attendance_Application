@@ -3,6 +3,8 @@ plugins {
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
     id "com.google.gms.google-services" // Firebase services
+    id 'org.jetbrains.kotlin.android'
+
 }
 
 android {
